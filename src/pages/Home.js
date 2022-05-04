@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
 import { itemsState } from "../recoil/items";
 import Navbar from "../components/Navbar";
 import Item from "../components/Item";
@@ -8,11 +9,14 @@ import * as api from "../api/index";
 
 function Home() {
   const [items, setItems] = useRecoilState(itemsState);
+  const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
+    console.log(user);
     async function getItems() {
       try {
         const response = await api.getItems();
+        console.log(response);
         setItems(response.data);
       } catch (err) {
         console.error(err);
@@ -22,9 +26,9 @@ function Home() {
   }, []);
 
   return (
-    <div className="h-full w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <div className="h-screen w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
       <Navbar />
-      <div className="flex flex-col items-center h-screen w-full ">
+      <div className="flex flex-col items-center w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
         <div className="flex flex-col items-center w-3/6 rounded mt-8 p-8 mb-8 bg-slate-100">
           <div className="flex justify-center items-center mb-8">
             <FaShopify className="mr-4 text-2xl" />
@@ -33,9 +37,20 @@ function Home() {
           </div>
           <div className="grid grid-cols-2 gap-8 w-full px-4">
             {items &&
+              user &&
               items.map((item) => {
-                let { name, price, desc, id } = item;
-                return <Item key={id} name={name} price={price} desc={desc} />;
+                let { name, price, desc, iid, img } = item;
+                return (
+                  <Item
+                    key={iid}
+                    iid={iid}
+                    uid={user.userId}
+                    name={name}
+                    price={price}
+                    desc={desc}
+                    img={img}
+                  />
+                );
               })}
           </div>
         </div>

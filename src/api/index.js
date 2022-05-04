@@ -8,7 +8,10 @@ const API = axios.create({ baseURL: "http://localhost:9000" });
 // export const signUp = (formData) => API.post('/user/signup', formData)
 // Initial get request for todos
 export const getItems = () => API.get(`/items`);
-export const addToCart = (item) => API.post("/addToCart", item);
+export const getCartItems = (userId) => API.get(`/getCart/${userId}`);
+export const addToCart = (item, userId) =>
+  API.post(`/addToCart/${userId}`, item);
+export const removeCartItem = (id) => API.delete(`/removeCart/${id}`);
 // Add todo
 // export const addTodo = (todo) => API.post('/todos', todo)
 // // Update todo
